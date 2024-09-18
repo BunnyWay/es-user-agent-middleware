@@ -7,9 +7,9 @@ BunnySDK.net.http.servePullZone({ url: "https://echo.free.beeceptor.com/" })
   .onOriginRequest(
     (ctx) => {
       ctx.request.headers.set("mobile", "true");
-      const ua = ctx.request.headers.get("User-Agent");
+      const ua = ctx.request.headers.get("User-Agent") ?? navigator.userAgent;
       const parser = new UA.UAParser(ua);
-      const device = parser.getDevice();
+      const device = parser.getDevice().type;
       switch (device) {
         case "mobile":
           ctx.request.headers.set("isMobile", "true");
@@ -20,6 +20,8 @@ BunnySDK.net.http.servePullZone({ url: "https://echo.free.beeceptor.com/" })
         default:
           break;
       }
+
+      return Promise.resolve(ctx.request);
     },
   ).onOriginResponse(async (ctx) => {
     const body = await ctx.response.json();
