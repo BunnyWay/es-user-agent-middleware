@@ -5,7 +5,7 @@ console.log("Starting server...");
 
 BunnySDK.net.http.servePullZone({ url: "https://echo.free.beeceptor.com/" })
   .onOriginRequest(
-    async (ctx) => {
+    (ctx) => {
       ctx.request.headers.set("mobile", "true");
       const ua = ctx.request.headers.get("User-Agent");
       const parser = new UA.UAParser(ua);
